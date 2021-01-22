@@ -27,7 +27,7 @@ jobs:
         run: |
           REGION=us-east-1
           REGISTRY=558830342743.dkr.ecr.us-east-1.amazonaws.com
-          docker login --username AWS --password ${{ secrets.AWS_PASSWORD }} $REGISTRY
+          echo ${{ secrets.AWS_PASSWORD }} | docker login --username AWS --password-stdin $REGISTRY
           bazel run //control_plane:vtex --define cluster=test-2a --experimental_ui_limit_console_output=1 | tee k8s-gitops-test/control_plane.yaml
       - name: Push changes
         run: |
