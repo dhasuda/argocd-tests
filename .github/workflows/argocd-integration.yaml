@@ -37,7 +37,7 @@ jobs:
       - name: 'git user'
         run: git config user.name "dhauda"
       - name: 'git email'
-        run: git config user.email $INTEGRATION_GITHUB_EMAIL
+        run: git config user.email "davihasuda@gmail.com"
         env:
           INTEGRATION_GITHUB_TOKEN: ${{ secrets.INTEGRATION_GITHUB_TOKEN }}
       - name: 'git add'
