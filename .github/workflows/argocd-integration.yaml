@@ -34,16 +34,14 @@ jobs:
         run: |
           touch k8s-gitops-test/control_plane.yaml
           bazel run //:platform --experimental_ui_limit_console_output=1 | tee k8s-gitops-test/control_plane.yaml
-      - name: 'git user'
-        run: git config user.name "dhauda"
-      - name: 'git email'
-        run: git config user.email "davihasuda@gmail.com"
       - name: 'cd push'
         run: |
           ls
           cd k8s-gitops-test
           pwd
           ls
+          git config user.name "dhauda"
+          git config user.email "davihasuda@gmail.com"
           git add control_plane.yaml
           git commit -m "New release"
           git push --set-upstream https://dhasuda:$INTEGRATION_GITHUB_TOKEN@github.com/dhasuda/k8s-gitops-test
