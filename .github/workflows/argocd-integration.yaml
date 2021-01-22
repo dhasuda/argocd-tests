@@ -22,7 +22,7 @@ jobs:
       - name: 'Clone integration repo'
         env:
           INTEGRATION_GITHUB_TOKEN: ${{ secrets.INTEGRATION_GITHUB_TOKEN }}
-        run: git clone https://user:$INTEGRATION_GITHUB_TOKEN@github.com/dhasuda/k8s-gitops-test
+        run: git clone https://dhasuda:$INTEGRATION_GITHUB_TOKEN@github.com/dhasuda/k8s-gitops-test
       - name: Build
         run: |
           REGION=us-east-1
@@ -32,8 +32,11 @@ jobs:
       - name: Push changes
         run: |
           cd k8s-gitops-test
-          git config user.name "dhasuda"
-          git config user.email "davihasuda@gmail.com"
+          git config user.name "dhauda"
+          git config user.email $INTEGRATION_GITHUB_EMAIL
           git add control_plane.yaml
           git commit -m "New release"
-          git push --set-upstream https://user:$INTEGRATION_GITHUB_TOKEN@github.com/dhasuda/k8s-gitops-test main
+          git push --set-upstream https://dhasuda:$INTEGRATION_GITHUB_TOKEN@github.com/dhasuda/k8s-gitops-test
+        env:
+          INTEGRATION_GITHUB_TOKEN: ${{ secrets.INTEGRATION_GITHUB_TOKEN }}
+          GITHUB_EMAIL: ${{ secrets.INTEGRATION_GITHUB_EMAIL }}
