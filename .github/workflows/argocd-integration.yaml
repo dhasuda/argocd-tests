@@ -8,8 +8,17 @@ jobs:
   push-to-gitops-integration:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Install bazel 3.2.0 and docker'
-        run: sudo apt update && sudo apt install bazel-3.2.0 && sudo apt install docker.io
+      - name: 'Install bazel 3.2.0'
+        run: sudo apt update && sudo apt install bazel-3.2.0
+      - name: 'Install docker pre requisite packages'
+        run: sudo apt-get install curl apt-transport-https ca-certificates software-properties-common
+      - name: 'Install docker'
+        run: |
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+          sudo apt update
+          apt-cache policy docker-ce
+          sudo apt install docker-ce
       - name: 'Clone integration repo'
         env:
           INTEGRATION_GITHUB_TOKEN: ${{ secrets.INTEGRATION_GITHUB_TOKEN }}
