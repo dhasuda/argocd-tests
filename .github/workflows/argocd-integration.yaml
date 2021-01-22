@@ -1,0 +1,39 @@
+name: publish-stable-aws
+
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+
+jobs:
+  push-to-gitops-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy on AWS
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - name: 'Install bazel 3.2.0 and docker'
+        run: sudo apt update && sudo apt install bazel-3.2.0 && sudo apt install docker.io
+      - name: 'Clone integration repo'
+        env:
+          INTEGRATION_GITHUB_TOKEN: ${{ secrets.INTEGRATION_GITHUB_TOKEN }}
+        run: git clone https://user:$INTEGRATION_GITHUB_TOKEN@github.com/dhasuda/k8s-gitops-test
+      - name: Build
+        run: |
+          REGION=us-east-1
+          REGISTRY=558830342743.dkr.ecr.us-east-1.amazonaws.com
+          docker login --username AWS --password ${{ secrets.AWS_PASSWORD }} $REGISTRY
+          bazel run //control_plane:vtex --define cluster=test-2a --experimental_ui_limit_console_output=1 | tee k8s-gitops-test/control_plane.yaml
+      - name: Push changes
+        run: |
+          cd k8s-gitops-test
+          git config user.name "dhasuda"
+          git config user.email "davihasuda@gmail.com"
+          git add control_plane.yaml
+          git commit -m "New release"
+          git push --set-upstream https://user:$INTEGRATION_GITHUB_TOKEN@github.com/dhasuda/k8s-gitops-test main
