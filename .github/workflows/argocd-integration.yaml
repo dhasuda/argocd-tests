@@ -14,7 +14,9 @@ jobs:
       - name: 'ls'
         run: ls
       - name: 'Install bazel 3.2.0'
-        run: sudo apt update && sudo apt install bazel-3.2.0
+        run: |
+          sudo apt update && sudo apt install bazel-3.2.0
+          sudo ln -s /usr/bin/bazel-3.2.0 /usr/bin/bazel
       - name: 'Install docker pre requisite packages'
         run: sudo apt-get install curl apt-transport-https ca-certificates software-properties-common
       - name: 'Install docker'
