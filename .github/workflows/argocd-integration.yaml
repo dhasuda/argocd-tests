@@ -26,9 +26,8 @@ jobs:
       - name: Docker login
         uses: docker/login-action@v1
         with:
-          registry: 558830342743.dkr.ecr.us-east-1.amazonaws.com
-          username: AWS
-          password: ${{ secrets.AWS_PASSWORD }}
+          username: dhasuda
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
       - name: Build
         run: bazel run //control_plane:vtex --define cluster=test-2a --experimental_ui_limit_console_output=1 | tee k8s-gitops-test/control_plane.yaml
       - name: Push changes
