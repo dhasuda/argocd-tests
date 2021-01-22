@@ -8,6 +8,7 @@ jobs:
   push-to-gitops-integration:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: 'pwd'
         run: pwd
       - name: 'ls'
