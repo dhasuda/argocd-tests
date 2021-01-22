@@ -32,14 +32,20 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
       - name: Build
         run: bazel run //:platform --experimental_ui_limit_console_output=1 | tee k8s-gitops-test/control_plane.yaml
-      - name: Push changes
-        run: |
-          cd k8s-gitops-test
-          git config user.name "dhauda"
-          git config user.email $INTEGRATION_GITHUB_EMAIL
-          git add control_plane.yaml
-          git commit -m "New release"
-          git push --set-upstream https://dhasuda:$INTEGRATION_GITHUB_TOKEN@github.com/dhasuda/k8s-gitops-test
+      - name: 'cd'
+        run: cd k8s-gitops-test
+      - name: 'git user'
+        run: git config user.name "dhauda"
+      - name: 'git email'
+        run: git config user.email $INTEGRATION_GITHUB_EMAIL
+        env:
+          INTEGRATION_GITHUB_TOKEN: ${{ secrets.INTEGRATION_GITHUB_TOKEN }}
+      - name: 'git add'
+        run: git add control_plane.yaml
+      - name: 'git commit'
+        run: git commit -m "New release"
+      - name: 'Push changes'
+        run: git push --set-upstream https://dhasuda:$INTEGRATION_GITHUB_TOKEN@github.com/dhasuda/k8s-gitops-test
         env:
           INTEGRATION_GITHUB_TOKEN: ${{ secrets.INTEGRATION_GITHUB_TOKEN }}
           GITHUB_EMAIL: ${{ secrets.INTEGRATION_GITHUB_EMAIL }}

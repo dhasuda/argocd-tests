@@ -1,2 +1,7 @@
 .DS_Store
 */**/.DS_Store
+
+bazel-argocd-tests
+bazel-bin
+bazel-out
+bazel-testlogs
